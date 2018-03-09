@@ -11,6 +11,8 @@ RUN apt-get update && apt-get install -y \
   libreadline-dev \
   libtool \
   libxml2-dev \
+  libxml2-utils \
+  sudo \
   xsltproc \
   zlib1g-dev && \
   rm -rf /var/lib/apt/lists/*
