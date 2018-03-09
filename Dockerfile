@@ -50,17 +50,4 @@ RUN git clone --depth 1 --branch ${PROJ_BRANCH} https://github.com/OSGEO/proj.4 
     ./autogen.sh && ./configure && make -j${BUILD_THREADS} && make install && \
     cd /src && rm -rf proj.4
 
-
-
 WORKDIR /src/postgis
-
-USER postgres
-
-# For now, put the initdb command at runtime
-# this reduces image size
-CMD initdb && \
-  pg_ctl start && \
-  ./autogen.sh && \
-  ./configure && \
-  make -j${BUILD_THREADS} && \
-  make check
