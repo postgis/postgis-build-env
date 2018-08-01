@@ -7,42 +7,42 @@ environments=[
         name='latest',
         PG='master',
         GEOS='master',
-        GDAL='trunk',
+        GDAL='master',
         PROJ='master'
     ),
     dict(
         name='stable',
         PG='REL_10_STABLE',
         GEOS='svn-3.6',
-        GDAL='2.2',
+        GDAL='release/2.3',
         PROJ='4.9'
     ),
     dict(
         name='stable_pg96',
         PG='REL9_6_STABLE',
         GEOS='svn-3.6',
-        GDAL='2.2',
+        GDAL='release/2.2',
         PROJ='4.9'
     ),
     dict(
         name='stable_pg95',
         PG='REL9_5_STABLE',
         GEOS='svn-3.6',
-        GDAL='2.2',
+        GDAL='release/2.2',
         PROJ='4.9'
     ),
     dict(
         name='stable_pg94',
         PG='REL9_4_STABLE',
         GEOS='svn-3.6',
-        GDAL='2.2',
+        GDAL='release/2.2',
         PROJ='4.9'
     ),
     dict(
         name='trusty',
         PG='REL9_3_STABLE',
         GEOS='svn-3.4',
-        GDAL='1.11',
+        GDAL='release/1.11',
         PROJ='4.8'
     )
 ]
