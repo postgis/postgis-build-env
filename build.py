@@ -11,7 +11,14 @@ environments=[
         PROJ='master'
     ),
     dict(
-        name='stable',
+        name='stable_pg11',
+        PG='REL_11_STABLE',
+        GEOS='master',
+        GDAL='release/2.3',
+        PROJ='5.1'
+    ),
+    dict(
+        name='stable_pg10',
         PG='REL_10_STABLE',
         GEOS='svn-3.6',
         GDAL='release/2.3',
@@ -32,26 +39,19 @@ environments=[
         PROJ='4.9'
     ),
     dict(
-        name='stable_pg94',
+        name='old',
         PG='REL9_4_STABLE',
-        GEOS='svn-3.6',
-        GDAL='release/2.2',
+        GEOS='svn-3.5',
+        GDAL='release/1.11',
         PROJ='4.9'
     ),
-    dict(
-        name='trusty',
-        PG='REL9_3_STABLE',
-        GEOS='svn-3.4',
-        GDAL='release/1.11',
-        PROJ='4.8'
-    )
 ]
 
 for env in environments:
     if env['name'] == 'latest':
         tag = 'latest'
     else:
-        versions = { k : ''.join(re.findall('\d+', v)) for k, v in env.items() }
+        versions = { k : ''.join(re.findall('\d+', v) or v) for k, v in env.items() }
         tag = 'pg{PG}-geos{GEOS}-gdal{GDAL}-proj{PROJ}'.format_map(versions)
     image = 'postgis/postgis-build-env:{}'.format(tag)
 
