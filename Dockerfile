@@ -61,3 +61,9 @@ RUN git clone --depth 1 --branch ${PROJ_BRANCH} https://github.com/OSGEO/proj.4 
     cd /src && rm -rf proj.4
 
 WORKDIR /src/postgis
+
+RUN ldconfig /usr/local/pgsql/lib
+USER postgres
+
+# create cluster now to save time on build
+RUN /usr/local/pgsql/bin/initdb -D /var/lib/postgresql
