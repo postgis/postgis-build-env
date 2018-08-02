@@ -53,7 +53,7 @@ for env in environments:
     else:
         versions = { k : ''.join(re.findall('\d+', v)) for k, v in env.items() }
         tag = 'pg{PG}-geos{GEOS}-gdal{GDAL}-proj{PROJ}'.format_map(versions)
-    image = 'dbaston/postgis-build-env:{}'.format(tag)
+    image = 'postgis/postgis-build-env:{}'.format(tag)
 
     subprocess.check_call([
         'docker', 'build',
