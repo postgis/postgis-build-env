@@ -17,6 +17,14 @@ RUN apt-get update && apt-get install -y \
   zlib1g-dev && \
   rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && apt-get install -y \
+  cmake \
+  libboost-test-dev \
+  libboost-thread-dev \
+  libgmp-dev \
+  libmpfr-dev \
+  libcgal-dev
+
 ARG BUILD_THREADS=4
 ENV PGDATA=/var/lib/postgresql
 
