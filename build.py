@@ -14,9 +14,9 @@ environments=[
     dict(
         name='stable_pg11',
         PG='REL_11_STABLE',
-        GEOS='master',
+        GEOS='3.7',
         GDAL='release/2.3',
-        PROJ='5.1'
+        PROJ='5.2'
     ),
     dict(
         name='stable_pg10',
@@ -44,7 +44,7 @@ environments=[
         PG='REL9_4_STABLE',
         GEOS='svn-3.5',
         GDAL='release/1.11',
-        PROJ='4.9'
+        PROJ='4.8'
     ),
 ]
 
