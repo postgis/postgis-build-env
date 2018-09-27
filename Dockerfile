@@ -26,6 +26,7 @@ RUN apt-get update && apt-get install -y \
   libcgal-dev
 
 ARG BUILD_THREADS=4
+ARG BUILD_DATE
 ENV PGDATA=/var/lib/postgresql
 
 RUN useradd postgres && \

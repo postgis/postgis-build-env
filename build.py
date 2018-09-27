@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import datetime
 import re
 import subprocess
 
@@ -57,6 +58,7 @@ for env in environments:
 
     subprocess.check_call([
         'docker', 'build',
+        '--build-arg', 'BUILD_DATE={}'.format(datetime.date.today().strftime("%Y%m%d")),
         '--build-arg', 'POSTGRES_BRANCH={PG}'.format_map(env),
         '--build-arg', 'GEOS_BRANCH={GEOS}'.format_map(env),
         '--build-arg', 'GDAL_BRANCH={GDAL}'.format_map(env),
