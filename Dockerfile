@@ -9,10 +9,13 @@ RUN apt-get update && apt-get install -y \
   git \
   libcunit1-dev \
   libjson-c-dev \
+  libprotobuf-c-dev \
   libreadline-dev \
   libtool \
   libxml2-dev \
   libxml2-utils \
+  pkg-config \
+  protobuf-c-compiler \
   sudo \
   xsltproc \
   zlib1g-dev && \
