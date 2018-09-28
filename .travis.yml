@@ -1,0 +1,8 @@
+services:
+  - docker
+
+sudo: false
+language: python
+
+script:
+  - python3 build.py
