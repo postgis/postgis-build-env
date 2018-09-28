@@ -2,6 +2,7 @@ FROM debian:stretch
 
 RUN apt-get update && apt-get install -y \
   autoconf \
+  gdb \
   bison \
   build-essential \
   curl \
@@ -15,10 +16,7 @@ RUN apt-get update && apt-get install -y \
   libxml2-utils \
   sudo \
   xsltproc \
-  zlib1g-dev && \
-  rm -rf /var/lib/apt/lists/*
-
-RUN apt-get update && apt-get install -y \
+  zlib1g-dev \
   cmake \
   libboost-test-dev \
   libboost-thread-dev \
@@ -26,7 +24,6 @@ RUN apt-get update && apt-get install -y \
   libmpfr-dev \
   libcgal-dev
 
-ARG BUILD_THREADS=4
 ARG BUILD_DATE
 ENV PGDATA=/var/lib/postgresql
 
@@ -41,25 +38,25 @@ WORKDIR /src
 ARG GDAL_BRANCH=trunk
 RUN git clone --depth 1 --branch ${GDAL_BRANCH} https://github.com/OSGeo/gdal && \
     cd gdal/gdal && \
-    ./autogen.sh && ./configure && make -j${BUILD_THREADS} && make install && \
+    ./autogen.sh && ./configure && make -j && make install && \
     cd /src && rm -rf gdal
 
 ARG GEOS_BRANCH=master
 RUN git clone --depth 1 --branch ${GEOS_BRANCH} https://github.com/OSGeo/geos && \
     cd geos && \
-    ./autogen.sh && ./configure && make -j${BUILD_THREADS} && make install && \
+    ./autogen.sh && ./configure && make -j && make install && \
     cd /src && rm -rf geos
 
 ARG POSTGRES_BRANCH=master
 RUN git clone --depth 1 --branch ${POSTGRES_BRANCH} https://github.com/postgres/postgres && \
     cd postgres && \
-    ./configure && make -j${BUILD_THREADS} && make install && \
+    ./configure && make -j && make install && \
     cd /src && rm -rf postgres
 
 ARG PROJ_BRANCH=master
 RUN git clone --depth 1 --branch ${PROJ_BRANCH} https://github.com/OSGEO/proj.4 && \
     cd proj.4 && \
-    ./autogen.sh && ./configure && make -j${BUILD_THREADS} && make install && \
+    ./autogen.sh && ./configure && make -j && make install && \
     cd /src && rm -rf proj.4
 
 WORKDIR /src/postgis
