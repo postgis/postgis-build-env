@@ -2,6 +2,7 @@ FROM debian:stretch
 
 RUN apt-get update && apt-get install -y \
   autoconf \
+  gdb \
   bison \
   build-essential \
   cmake \
@@ -27,9 +28,12 @@ RUN apt-get update && apt-get install -y \
   wget \
   xsltproc \
   zlib1g-dev && \
+  apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src
+
+ARG BUILD_THREADS=4
 RUN wget https://github.com/Oslandia/SFCGAL/archive/v1.3.0.tar.gz && \
     tar xzvf v1.3.0.tar.gz && \
     rm v1.3.0.tar.gz && \
@@ -37,11 +41,10 @@ RUN wget https://github.com/Oslandia/SFCGAL/archive/v1.3.0.tar.gz && \
     mkdir cmake-build && \
     cd cmake-build && \
     cmake .. && \
-    make -j4 && \
+    make -j${BUILD_THREADS} && \
     make install && \
     cd /src && rm -rf SFCGAL-1.3.0
 
-ARG BUILD_THREADS=4
 ARG BUILD_DATE
 ENV PGDATA=/var/lib/postgresql
 
