@@ -33,19 +33,27 @@ environments=[
         PROJ='4.9'
     ),
     dict(
-        name='stable_pg95',
+        name='old_pg95',
         PG='REL9_5_STABLE',
-        GEOS='svn-3.6',
-        GDAL='release/2.2',
-        PROJ='4.9'
-    ),
-    dict(
-        name='old',
-        PG='REL9_4_STABLE',
         GEOS='svn-3.5',
         GDAL='release/1.11',
         PROJ='4.8'
     ),
+# Pre-PostGIS 3.0
+#    dict(
+#        name='stable_pg95',
+#        PG='REL9_5_STABLE',
+#        GEOS='svn-3.6',
+#        GDAL='release/2.2',
+#        PROJ='4.9'
+#    ),
+#    dict(
+#        name='old',
+#        PG='REL9_4_STABLE',
+#        GEOS='svn-3.5',
+#        GDAL='release/1.11',
+#        PROJ='4.8'
+#    ),
 ]
 
 for env in environments:
