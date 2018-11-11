@@ -66,6 +66,7 @@ for env in environments:
 
     subprocess.check_call([
         'docker', 'build',
+        '--pull',
         '--build-arg', 'BUILD_DATE={}'.format(datetime.date.today().strftime("%Y%m%d")),
         '--build-arg', 'POSTGRES_BRANCH={PG}'.format_map(env),
         '--build-arg', 'GEOS_BRANCH={GEOS}'.format_map(env),
