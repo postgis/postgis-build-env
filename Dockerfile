@@ -1,14 +1,18 @@
-FROM debian:stretch
+FROM debian:unstable-slim
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
   autoconf \
-  gdb \
+  automake \
   bison \
   build-essential \
+  ca-certificates \
   cmake \
   curl \
   flex \
+  gdb \
   git \
+  libboost-serialization-dev \
   libboost-test-dev \
   libboost-thread-dev \
   libcgal-dev \
@@ -35,16 +39,17 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /src
 
 ARG BUILD_THREADS=4
-RUN wget https://github.com/Oslandia/SFCGAL/archive/v1.3.0.tar.gz && \
-    tar xzvf v1.3.0.tar.gz && \
-    rm v1.3.0.tar.gz && \
-    cd SFCGAL-1.3.0 && \
+
+RUN wget https://github.com/Oslandia/SFCGAL/archive/v1.3.5.tar.gz && \
+    tar xzvf v1.3.5.tar.gz && \
+    rm v1.3.5.tar.gz && \
+    cd SFCGAL-1.3.5 && \
     mkdir cmake-build && \
     cd cmake-build && \
     cmake .. && \
     make -j${BUILD_THREADS} && \
     make install && \
-    cd /src && rm -rf SFCGAL-1.3.0
+    cd /src && rm -rf SFCGAL-1.3.5
 
 ARG BUILD_DATE
 ENV PGDATA=/var/lib/postgresql
@@ -62,7 +67,7 @@ RUN git clone --depth 1 --branch ${GDAL_BRANCH} https://github.com/OSGeo/gdal &&
     cd /src && rm -rf gdal
 
 ARG GEOS_BRANCH=master
-RUN git clone --depth 1 --branch ${GEOS_BRANCH} https://github.com/OSGeo/geos && \
+RUN git clone --depth 1 --branch ${GEOS_BRANCH} https://github.com/libgeos/geos && \
     cd geos && \
     ./autogen.sh && ./configure && make -j${BUILD_THREADS} && make install && \
     cd /src && rm -rf geos
