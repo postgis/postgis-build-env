@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y \
   pkg-config \
   protobuf-c-compiler \
   sudo \
+  valgrind \
   wget \
   xsltproc \
   zlib1g-dev && \
