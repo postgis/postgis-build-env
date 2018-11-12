@@ -23,7 +23,6 @@ RUN apt-get update && \
   libpcre3-dev \
   libprotobuf-c-dev \
   libreadline-dev \
-  libsfcgal-dev \
   libtool \
   libxml2-dev \
   libxml2-utils \
@@ -40,6 +39,18 @@ RUN apt-get update && \
 WORKDIR /src
 
 ARG BUILD_THREADS=4
+
+RUN wget https://github.com/Oslandia/SFCGAL/archive/v1.3.6.tar.gz && \
+     tar xzvf v1.3.6.tar.gz && \
+     rm v1.3.6.tar.gz && \
+     cd SFCGAL-1.3.6 && \
+     mkdir cmake-build && \
+     cd cmake-build && \
+     cmake .. && \
+     make -j${BUILD_THREADS} && \
+     make install && \
+     cd /src && rm -rf SFCGAL-1.3.6
+
 ARG BUILD_DATE
 ENV PGDATA=/var/lib/postgresql
 
