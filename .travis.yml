@@ -1,9 +1,0 @@
-services:
-  - docker
-
-sudo: false
-language: python
-
-script:
-  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-  - python3 build.py
