@@ -31,6 +31,7 @@ RUN apt-get update && \
   pkg-config \
   protobuf-c-compiler \
   sudo \
+  sqlite3 \
   valgrind \
   wget \
   xsltproc \
