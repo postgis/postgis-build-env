@@ -24,6 +24,7 @@ RUN apt-get update && \
   libpcre3-dev \
   libprotobuf-c-dev \
   libreadline-dev \
+  libsqlite3-dev \
   libtool \
   libxml2-dev \
   libxml2-utils \
