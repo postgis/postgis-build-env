@@ -10,6 +10,7 @@ RUN apt-get update && \
   clang \
   cmake \
   curl \
+  eatmydata \
   flex \
   gdb \
   git \
@@ -40,6 +41,8 @@ RUN apt-get update && \
   rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src
+
+RUN echo /usr/lib/x86_64-linux-gnu/libeatmydata.so >> /etc/ld.so.preload
 
 ARG BUILD_THREADS=4
 
