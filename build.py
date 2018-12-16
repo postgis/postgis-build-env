@@ -9,8 +9,15 @@ environments=[
         name='old_pg95',
         PG='REL9_5_STABLE',
         GEOS='svn-3.6',
-        GDAL='release/1.11',
+        GDAL='release/2.1',
         PROJ='4.8'
+    ),
+    dict(
+        name='stable_pg11',
+        PG='REL_11_STABLE',
+        GEOS='3.7',
+        GDAL='release/2.4',
+        PROJ='5.2'
     ),
     dict(
         name='latest',
@@ -18,13 +25,6 @@ environments=[
         GEOS='master',
         GDAL='master',
         PROJ='master'
-    ),
-    dict(
-        name='stable_pg11',
-        PG='REL_11_STABLE',
-        GEOS='3.7',
-        GDAL='release/2.3',
-        PROJ='5.2'
     ),
     dict(
         name='stable_pg10',
