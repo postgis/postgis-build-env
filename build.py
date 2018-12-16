@@ -4,6 +4,14 @@ import re
 import subprocess
 
 environments=[
+# put last modified first to iterate faster
+    dict(
+        name='old_pg95',
+        PG='REL9_5_STABLE',
+        GEOS='svn-3.6',
+        GDAL='release/1.11',
+        PROJ='4.8'
+    ),
     dict(
         name='latest',
         PG='master',
@@ -31,13 +39,6 @@ environments=[
         GEOS='svn-3.6',
         GDAL='release/2.2',
         PROJ='4.9'
-    ),
-    dict(
-        name='old_pg95',
-        PG='REL9_5_STABLE',
-        GEOS='svn-3.6',
-        GDAL='release/1.11',
-        PROJ='4.8'
     ),
 # Pre-PostGIS 3.0
 #    dict(
