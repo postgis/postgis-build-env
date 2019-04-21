@@ -87,7 +87,8 @@ RUN git clone --depth 1 --branch ${GEOS_BRANCH} https://github.com/libgeos/geos 
 ARG POSTGRES_BRANCH=master
 RUN git clone --depth 1 --branch ${POSTGRES_BRANCH} https://github.com/postgres/postgres && \
     cd postgres && \
-    ./configure && make -j${BUILD_THREADS} && make install && \
+    ./configure --enable-cassert --enable-debug CFLAGS="-ggdb -Og -g3 -fno-omit-frame-pointer" && \
+    make -j${BUILD_THREADS} && make install && \
     cd /src && rm -rf postgres
 
 WORKDIR /src/postgis
