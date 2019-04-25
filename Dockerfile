@@ -85,9 +85,10 @@ RUN git clone --depth 1 --branch ${GEOS_BRANCH} https://github.com/libgeos/geos 
     cd /src && rm -rf geos
 
 ARG POSTGRES_BRANCH=master
+ARG PG_CC=gcc
 RUN git clone --depth 1 --branch ${POSTGRES_BRANCH} https://github.com/postgres/postgres && \
     cd postgres && \
-    ./configure --enable-cassert --enable-debug CFLAGS="-ggdb -Og -g3 -fno-omit-frame-pointer" && \
+    ./configure --enable-cassert --enable-debug CC=${PG_CC} CFLAGS="-ggdb -Og -g3 -fno-omit-frame-pointer" && \
     make -j${BUILD_THREADS} && make install && \
     cd /src && rm -rf postgres
 
