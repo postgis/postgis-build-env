@@ -6,12 +6,20 @@ import subprocess
 environments=[
 # put last modified first to iterate faster
     dict(
-        name='stable_pg11',
-        PG='REL_11_STABLE',
+        name='stable_pg12',
+        PG='REL_12_STABLE',
         GEOS='3.7',
-        GDAL='release/2.4',
-        PROJ='5.2',
+        GDAL='release/3.0',
+        PROJ='6.1.1',
         PG_CC='clang'
+    ),
+    dict(
+        name='stable_pg12',
+        PG='REL_12_STABLE',
+        GEOS='3.7',
+        GDAL='release/3.0',
+        PROJ='6.1.1',
+        PG_CC='gcc'
     ),
     dict(
         name='old_pg95',
@@ -74,6 +82,15 @@ environments=[
 #        GEOS='svn-3.5',
 #        GDAL='release/1.11',
 #        PROJ='4.8'
+#    ),
+# Old Clang build
+#    dict(
+#        name='stable_pg11',
+#        PG='REL_11_STABLE',
+#        GEOS='3.7',
+#        GDAL='release/2.4',
+#        PROJ='5.2',
+#        PG_CC='clang'
 #    ),
 ]
 
