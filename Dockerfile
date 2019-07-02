@@ -46,16 +46,16 @@ RUN echo /usr/lib/x86_64-linux-gnu/libeatmydata.so >> /etc/ld.so.preload
 
 ARG BUILD_THREADS=4
 
-RUN wget https://github.com/Oslandia/SFCGAL/archive/v1.3.6.tar.gz && \
-     tar xzvf v1.3.6.tar.gz && \
-     rm v1.3.6.tar.gz && \
-     cd SFCGAL-1.3.6 && \
+RUN wget https://github.com/Oslandia/SFCGAL/archive/v1.3.7.tar.gz && \
+     tar xzvf v1.3.7.tar.gz && \
+     rm v1.3.7.tar.gz && \
+     cd SFCGAL-1.3.7 && \
      mkdir cmake-build && \
      cd cmake-build && \
      cmake .. && \
      make -j${BUILD_THREADS} && \
      make install && \
-     cd /src && rm -rf SFCGAL-1.3.6
+     cd /src && rm -rf SFCGAL-1.3.7
 
 ARG BUILD_DATE
 ENV PGDATA=/var/lib/postgresql
