@@ -6,6 +6,14 @@ import subprocess
 environments=[
 # put last modified first to iterate faster
     dict(
+        name='latest',
+        PG='master',
+        GEOS='master',
+        GDAL='master',
+        PROJ='master',
+        PG_CC='gcc'
+    ),
+    dict(
         name='stable_pg12',
         PG='REL_12_STABLE',
         GEOS='3.7',
@@ -22,27 +30,11 @@ environments=[
         PG_CC='gcc'
     ),
     dict(
-        name='old_pg95',
-        PG='REL9_5_STABLE',
-        GEOS='svn-3.6',
-        GDAL='release/2.1',
-        PROJ='4.8',
-        PG_CC='gcc'
-    ),
-    dict(
         name='stable_pg11',
         PG='REL_11_STABLE',
         GEOS='3.7',
         GDAL='release/2.4',
         PROJ='5.2',
-        PG_CC='gcc'
-    ),
-    dict(
-        name='latest',
-        PG='master',
-        GEOS='master',
-        GDAL='master',
-        PROJ='master',
         PG_CC='gcc'
     ),
     dict(
@@ -59,6 +51,14 @@ environments=[
         GEOS='svn-3.6',
         GDAL='release/2.2',
         PROJ='4.9',
+        PG_CC='gcc'
+    ),
+    dict(
+        name='old_pg95',
+        PG='REL9_5_STABLE',
+        GEOS='svn-3.6',
+        GDAL='release/2.1',
+        PROJ='4.8',
         PG_CC='gcc'
     ),
 # Pre-PostGIS 3.0
