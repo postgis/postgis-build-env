@@ -58,40 +58,9 @@ environments=[
         PG='REL9_5_STABLE',
         GEOS='svn-3.6',
         GDAL='release/2.1',
-        PROJ='4.8',
+        PROJ='4.9',
         PG_CC='gcc'
-    ),
-# Pre-PostGIS 3.0
-#    dict(
-#        name='old_pg95',
-#        PG='REL9_5_STABLE',
-#        GEOS='svn-3.5',
-#        GDAL='release/1.11',
-#        PROJ='4.8'
-#    ),
-#    dict(
-#        name='stable_pg95',
-#        PG='REL9_5_STABLE',
-#        GEOS='svn-3.6',
-#        GDAL='release/2.2',
-#        PROJ='4.9'
-#    ),
-#    dict(
-#        name='old',
-#        PG='REL9_4_STABLE',
-#        GEOS='svn-3.5',
-#        GDAL='release/1.11',
-#        PROJ='4.8'
-#    ),
-# Old Clang build
-#    dict(
-#        name='stable_pg11',
-#        PG='REL_11_STABLE',
-#        GEOS='3.7',
-#        GDAL='release/2.4',
-#        PROJ='5.2',
-#        PG_CC='clang'
-#    ),
+    )
 ]
 
 for env in environments:
