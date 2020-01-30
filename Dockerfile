@@ -19,6 +19,7 @@ RUN apt-get update && \
   libboost-thread-dev \
   libcgal-dev \
   libcunit1-dev \
+  libcurl4-gnutls-dev \
   libgmp-dev \
   libjson-c-dev \
   libmpfr-dev \
@@ -26,6 +27,7 @@ RUN apt-get update && \
   libprotobuf-c-dev \
   libreadline-dev \
   libsqlite3-dev \
+  libtiff-dev \
   libtool \
   libxml2-dev \
   libxml2-utils \
