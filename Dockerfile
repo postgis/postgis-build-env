@@ -73,7 +73,7 @@ RUN git clone --depth 1 --branch ${PROJ_BRANCH} https://github.com/OSGEO/proj.4 
     ./autogen.sh && ./configure && make -j${BUILD_THREADS} && make install && \
     cd /src && rm -rf proj.4
 
-ARG GDAL_BRANCH=trunk
+ARG GDAL_BRANCH=master
 RUN git clone --depth 1 --branch ${GDAL_BRANCH} https://github.com/OSGeo/gdal && \
     cd gdal/gdal && \
     ./autogen.sh && ./configure && make -j${BUILD_THREADS} && make install && \

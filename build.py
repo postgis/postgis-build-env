@@ -14,6 +14,22 @@ environments=[
         PG_CC='gcc'
     ),
     dict(
+        name='stable_pg13',
+        PG='REL_13_STABLE',
+        GEOS='3.8',
+        GDAL='release/3.1',
+        PROJ='7.1',
+        PG_CC='clang'
+    ),
+    dict(
+        name='stable_pg13',
+        PG='REL_13_STABLE',
+        GEOS='3.8',
+        GDAL='release/3.1',
+        PROJ='7.1',
+        PG_CC='gcc'
+    ),
+    dict(
         name='stable_pg12',
         PG='REL_12_STABLE',
         GEOS='3.7',
