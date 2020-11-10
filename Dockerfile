@@ -49,7 +49,7 @@ RUN echo /usr/lib/x86_64-linux-gnu/libeatmydata.so >> /etc/ld.so.preload
 ARG BUILD_THREADS=4
 
 ARG SFCGAL_BRANCH=master
-RUN git clone --depth 1 --branch ${SFCGAL_BRANCH} https://github.com/Oslandia/SFCGAL && \
+RUN git clone --depth 1 --branch ${SFCGAL_BRANCH} https://gitlab.com/Oslandia/SFCGAL.git && \
      cd SFCGAL && \
      mkdir cmake-build && \
      cd cmake-build && \
