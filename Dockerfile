@@ -10,6 +10,7 @@ RUN apt-get update && \
   clang \
   cmake \
   curl \
+  docbook-xml \
   eatmydata \
   flex \
   gdb \
