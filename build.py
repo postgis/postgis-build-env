@@ -16,7 +16,7 @@ environments=[
     dict(
         name='stable_pg13',
         PG='REL_13_STABLE',
-        GEOS='3.8',
+        GEOS='3.9',
         GDAL='release/3.1',
         PROJ='7.1',
         PG_CC='clang'
@@ -24,7 +24,7 @@ environments=[
     dict(
         name='stable_pg13',
         PG='REL_13_STABLE',
-        GEOS='3.8',
+        GEOS='3.9',
         GDAL='release/3.1',
         PROJ='7.1',
         PG_CC='gcc'
@@ -32,7 +32,7 @@ environments=[
     dict(
         name='stable_pg12',
         PG='REL_12_STABLE',
-        GEOS='3.7',
+        GEOS='3.8',
         GDAL='release/3.0',
         PROJ='6.1.1',
         PG_CC='clang'
@@ -40,7 +40,7 @@ environments=[
     dict(
         name='stable_pg12',
         PG='REL_12_STABLE',
-        GEOS='3.7',
+        GEOS='3.8',
         GDAL='release/3.0',
         PROJ='6.1.1',
         PG_CC='gcc'
