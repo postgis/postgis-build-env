@@ -69,10 +69,10 @@ RUN useradd postgres && \
 ENV PATH="/usr/local/pgsql/bin:${PATH}"
 
 ARG PROJ_BRANCH=master
-RUN git clone --depth 1 --branch ${PROJ_BRANCH} https://github.com/OSGEO/proj.4 && \
-    cd proj.4 && \
+RUN git clone --depth 1 --branch ${PROJ_BRANCH} https://github.com/OSGeo/PROJ && \
+    cd PROJ && \
     ./autogen.sh && ./configure && make -j${BUILD_THREADS} && make install && \
-    cd /src && rm -rf proj.4
+    cd /src && rm -rf PROJ
 
 ARG GDAL_BRANCH=master
 RUN git clone --depth 1 --branch ${GDAL_BRANCH} https://github.com/OSGeo/gdal && \
