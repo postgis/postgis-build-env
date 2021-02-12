@@ -83,7 +83,10 @@ RUN git clone --depth 1 --branch ${GDAL_BRANCH} https://github.com/OSGeo/gdal &&
 ARG GEOS_BRANCH=master
 RUN git clone --depth 1 --branch ${GEOS_BRANCH} https://github.com/libgeos/geos && \
     cd geos && \
-    ./autogen.sh && ./configure && make -j${BUILD_THREADS} && make install && \
+    mkdir cmake-build && \
+    cd cmake-build && \
+    cmake -DCMAKE_BUILD_TYPE=Release .. && \
+    make -j${BUILD_THREADS} && make install && \
     cd /src && rm -rf geos
 
 ARG POSTGRES_BRANCH=master
