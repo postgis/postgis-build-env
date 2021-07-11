@@ -8,9 +8,17 @@ environments=[
     dict(
         name='latest',
         PG='master',
-        GEOS='master',
+        GEOS='main',
         GDAL='master',
         PROJ='master',
+        PG_CC='gcc'
+    ),
+    dict(
+        name='stable_pg14',
+        PG='REL_14_STABLE',
+        GEOS='3.9',
+        GDAL='release/3.1',
+        PROJ='7.1',
         PG_CC='gcc'
     ),
     dict(
