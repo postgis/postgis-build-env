@@ -98,7 +98,6 @@ all_environments=[
     ]
 if len(sys.argv) > 0:    
     env_batch =  sys.argv[0]
-}
 
 if env_batch == 'weekly': 
     environments = all_environments[1:2]
