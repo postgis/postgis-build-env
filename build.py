@@ -96,11 +96,13 @@ all_environments=[
             PG_CC='gcc'
         )
     ]
-if len(sys.argv) > 0:    
-    env_batch =  sys.argv[0]
+if len(sys.argv) > 1:    
+    env_batch =  sys.argv[1]
+
+print("Env Batch selected:", env_batch, all_environments[0:3])
 
 if env_batch == 'weekly': 
-    environments = all_environments[1:2]
+    environments = all_environments[0:3]
 else:
     environments = all_environments
 
