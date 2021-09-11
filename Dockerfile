@@ -62,7 +62,7 @@ RUN git clone --depth 1 --branch ${SFCGAL_BRANCH} https://gitlab.com/Oslandia/SF
 ARG BUILD_DATE
 ENV PGDATA=/var/lib/postgresql
 
-RUN useradd postgres && \
+RUN useradd postgres -p postgres -G sudo && \
     mkdir -p ${PGDATA} && chown postgres ${PGDATA} && \
     mkdir -p /src/postgis && chown postgres /src/postgis
    
