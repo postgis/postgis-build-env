@@ -99,12 +99,12 @@ all_environments=[
 if len(sys.argv) > 1:    
     env_batch =  sys.argv[1]
 
-print("Env Batch selected:", env_batch, all_environments[0:3])
-
 if env_batch == 'weekly': 
     environments = all_environments[1:3]
 else:
     environments = all_environments
+
+print("Env Batch selected:", env_batch, environments)
 
 for env in environments:
     if env['PG_CC'] == 'clang':
