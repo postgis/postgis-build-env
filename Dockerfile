@@ -21,8 +21,6 @@ RUN apt-get update && \
   libcgal-dev \
   libcunit1-dev \
   libcurl4-gnutls-dev \
-  libflatbuffers1 \
-  libflatbuffers-dev \
   libgmp-dev \
   libjson-c-dev \
   libmpfr-dev \
