@@ -18,7 +18,6 @@ RUN apt-get update && \
   libboost-serialization-dev \
   libboost-test-dev \
   libboost-thread-dev \
-  libcgal-dev \
   libcunit1-dev \
   libcurl4-gnutls-dev \
   libgmp-dev \
@@ -49,12 +48,20 @@ RUN echo /usr/lib/x86_64-linux-gnu/libeatmydata.so >> /etc/ld.so.preload
 
 ARG BUILD_THREADS=4
 
+ARG CGAL_BRANCH=5.3
+RUN wget https://github.com/CGAL/cgal/releases/download/v${CGAL_BRANCH}/CGAL-${CGAL_BRANCH}.tar.xz && \
+    tar xJf CGAL-${CGAL_BRANCH}.tar.xz && \
+    cd CGAL-${CGAL_BRANCH} && mkdir build && cd build && \
+    cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX=/src/CGAL .. && \
+    make && make install && cd ../.. && \
+    cd /src && rm -rf CGAL-${CGAL_BRANCH}
+
 ARG SFCGAL_BRANCH=master
 RUN git clone --depth 1 --branch ${SFCGAL_BRANCH} https://gitlab.com/Oslandia/SFCGAL.git && \
      cd SFCGAL && \
      mkdir cmake-build && \
      cd cmake-build && \
-     cmake .. && \
+     cmake -DCGAL_DIR="/src/CGAL" -DCMAKE_PREFIX_PATH=/src/CGAL .. && \
      make -j${BUILD_THREADS} && \
      make install && \
      cd /src && rm -rf SFCGAL
