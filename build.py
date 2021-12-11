@@ -19,7 +19,7 @@ all_environments=[
             name='stable_pg14',
             PG='REL_14_STABLE',
             GEOS='main',
-            GDAL='release/3.1',
+            GDAL='release/3.4',
             PROJ='7.1',
             PG_CC='clang'
         ),
@@ -27,7 +27,7 @@ all_environments=[
             name='stable_pg14',
             PG='REL_14_STABLE',
             GEOS='3.9',
-            GDAL='release/3.1',
+            GDAL='release/3.3',
             PROJ='7.1',
             PG_CC='gcc'
         ),
@@ -100,7 +100,7 @@ if len(sys.argv) > 1:
     env_batch =  sys.argv[1]
 
 if env_batch == 'weekly': 
-    environments = all_environments[0:3]
+    environments = all_environments[1:3]
 else:
     environments = all_environments
 
