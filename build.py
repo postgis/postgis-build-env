@@ -16,6 +16,14 @@ all_environments=[
             PG_CC='gcc'
         ),
         dict(
+            name='stable_pg15',
+            PG='REL_15_STABLE',
+            GEOS='main',
+            GDAL='release/3.4',
+            PROJ='9.0',
+            PG_CC='clang'
+        ),
+        dict(
             name='stable_pg14',
             PG='REL_14_STABLE',
             GEOS='main',
@@ -100,7 +108,7 @@ if len(sys.argv) > 1:
     env_batch =  sys.argv[1]
 
 if env_batch == 'weekly': 
-    environments = all_environments[1:3]
+    environments = all_environments[0:3]
 else:
     environments = all_environments
 
