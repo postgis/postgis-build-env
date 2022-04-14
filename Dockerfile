@@ -66,26 +66,37 @@ RUN git clone --depth 1 --branch ${SFCGAL_BRANCH} https://gitlab.com/Oslandia/SF
      make install && \
      cd /src && rm -rf SFCGAL
 
+ARG PROJ_BRANCH=master
+RUN git clone --depth 1 --branch ${PROJ_BRANCH} https://github.com/OSGeo/PROJ && \
+    cd PROJ && \
+    mkdir cmake-build && \
+    #./autogen.sh && ./configure && make -j${BUILD_THREADS} && make install && \
+    cd cmake-build && \
+    cmake .. && \
+    make -j${BUILD_THREADS} && \
+    make install && \
+    cd /src && rm -rf PROJ
+
 ARG BUILD_DATE
 ENV PGDATA=/var/lib/postgresql
 
 RUN useradd postgres -p paYAHIZz4VZyc -G sudo && \
     mkdir -p ${PGDATA} && chown postgres ${PGDATA} && \
     mkdir -p /src/postgis && chown postgres /src/postgis
-   
-ENV PATH="/usr/local/pgsql/bin:${PATH}"
 
-ARG PROJ_BRANCH=master
-RUN git clone --depth 1 --branch ${PROJ_BRANCH} https://github.com/OSGeo/PROJ && \
-    cd PROJ && \
-    ./autogen.sh && ./configure && make -j${BUILD_THREADS} && make install && \
-    cd /src && rm -rf PROJ
+ENV PATH="/usr/local/pgsql/bin:${PATH}"
 
 ARG GDAL_BRANCH=master
 RUN git clone --depth 1 --branch ${GDAL_BRANCH} https://github.com/OSGeo/gdal && \
-    cd gdal/gdal && \
+    cd gdal && \
+    # gdal project directory structure - has been changed !
+    if [ -d "gdal" ] ; then \
+        echo "Directory 'gdal' dir exists -> older version!" ; \
+        cd gdal ; \
+    fi && \
     ./autogen.sh && ./configure && make -j${BUILD_THREADS} && make install && \
     cd /src && rm -rf gdal
+
 
 ARG GEOS_BRANCH=master
 RUN git clone --depth 1 --branch ${GEOS_BRANCH} https://github.com/libgeos/geos && \
