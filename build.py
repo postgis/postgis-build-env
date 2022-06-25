@@ -8,6 +8,22 @@ environments = []
 all_environments=[
     # put last modified first to iterate faster
         dict(
+            name='beta_pg15',
+            PG='master',
+            GEOS='main',
+            GDAL='release/3.4',
+            PROJ='7.1',
+            PG_CC='gcc'
+        ),
+        dict(
+            name='beta_pg15',
+            PG='master',
+            GEOS='main',
+            GDAL='master',
+            PROJ='9.0',
+            PG_CC='gcc'
+        ),
+       dict(
             name='latest',
             PG='master',
             GEOS='main',
@@ -100,7 +116,7 @@ if len(sys.argv) > 1:
     env_batch =  sys.argv[1]
 
 if env_batch == 'weekly': 
-    environments = all_environments[0:3]
+    environments = all_environments[0:2]
 else:
     environments = all_environments
 
