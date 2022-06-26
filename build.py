@@ -7,22 +7,6 @@ env_batch = 'all'
 environments = []
 all_environments=[
     # put last modified first to iterate faster
-        dict(
-            name='beta_pg15',
-            PG='master',
-            GEOS='main',
-            GDAL='release/3.4',
-            PROJ='7.1',
-            PG_CC='gcc'
-        ),
-        dict(
-            name='beta_pg15',
-            PG='master',
-            GEOS='main',
-            GDAL='master',
-            PROJ='9.0',
-            PG_CC='gcc'
-        ),
        dict(
             name='latest',
             PG='master',
@@ -35,14 +19,14 @@ all_environments=[
             name='stable_pg14',
             PG='REL_14_STABLE',
             GEOS='main',
-            GDAL='release/3.4',
-            PROJ='7.1',
+            GDAL='release/3.5',
+            PROJ='8.0',
             PG_CC='clang'
         ),
         dict(
             name='stable_pg14',
             PG='REL_14_STABLE',
-            GEOS='3.9',
+            GEOS='3.10',
             GDAL='release/3.3',
             PROJ='7.1',
             PG_CC='gcc'
@@ -116,7 +100,7 @@ if len(sys.argv) > 1:
     env_batch =  sys.argv[1]
 
 if env_batch == 'weekly': 
-    environments = all_environments[0:2]
+    environments = all_environments[0:3]
 else:
     environments = all_environments
 
