@@ -97,7 +97,7 @@ RUN git clone --depth 1 --branch ${GDAL_BRANCH} https://github.com/OSGeo/gdal &&
     if [ -f "./autogen.sh:" ]; then \
       set -eux \
       # Building with autoconf ( old/deprecated )
-      ./autogen.sh && ./configure
+      ./autogen.sh && ./configure && \
       ; \
     else \
         # Building with cmake
