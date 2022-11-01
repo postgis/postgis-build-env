@@ -94,9 +94,20 @@ RUN git clone --depth 1 --branch ${GDAL_BRANCH} https://github.com/OSGeo/gdal &&
         echo "Directory 'gdal' dir exists -> older version!" ; \
         cd gdal ; \
     fi && \
-    ./autogen.sh && ./configure && make -j${BUILD_THREADS} && make install && \
-    cd /src && rm -rf gdal
-
+    if [ -f "./autogen.sh:" ]; then \
+      set -eux \
+      # Building with autoconf ( old/deprecated )
+      ./autogen.sh && ./configure
+      ; \
+    else \
+        # Building with cmake
+        set -eux && \
+        mkdir build && cd build && \
+        cmake -DCMAKE_BUILD_TYPE=Release .. \
+        ; \
+    fi && \ 
+    make -j${BUILD_THREADS} && make install && \
+    cd /src && rm -fr gdal
 
 ARG GEOS_BRANCH=master
 RUN git clone --depth 1 --branch ${GEOS_BRANCH} https://github.com/libgeos/geos && \
