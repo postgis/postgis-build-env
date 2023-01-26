@@ -75,16 +75,10 @@ RUN git clone --depth 1 --branch ${PROJ_BRANCH} https://github.com/OSGeo/PROJ &&
     cmake .. && \
     make -j${BUILD_THREADS} && \
     make install && \
+    projsync --system-directory --source-id us_noaa && \
+    projsync --system-directory --source-id ch_swisstopo && \
     cd /src && rm -rf PROJ
 
-# download data files for proj
-RUN \
-    mkdir -p /usr/share/proj; \
-    wget --no-verbose --mirror https://cdn.proj.org/; \
-    rm -f cdn.proj.org/*.js; \
-    rm -f cdn.proj.org/*.css; \
-    mv cdn.proj.org/* /usr/share/proj/; \
-    rmdir cdn.proj.org
 
 ARG BUILD_DATE
 ENV PGDATA=/var/lib/postgresql
