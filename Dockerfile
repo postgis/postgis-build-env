@@ -128,6 +128,8 @@ RUN git clone --depth 1 --branch ${POSTGRES_BRANCH} https://github.com/postgres/
     make -j${BUILD_THREADS} && make install && \
     cd /src && rm -rf postgres
 
+# disable requiring password to sudo
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 WORKDIR /src/postgis
 
 RUN ldconfig /usr/local/pgsql/lib
