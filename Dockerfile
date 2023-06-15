@@ -75,8 +75,8 @@ RUN git clone --depth 1 --branch ${PROJ_BRANCH} https://github.com/OSGeo/PROJ &&
     cmake .. && \
     make -j${BUILD_THREADS} && \
     make install && \
-    projsync --system-directory --source-id us_noaa && \
-    projsync --system-directory --source-id ch_swisstopo && \
+    #projsync --system-directory --source-id us_noaa && \
+    #projsync --system-directory --source-id ch_swisstopo && \
     cd /src && rm -rf PROJ
 
 
