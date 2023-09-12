@@ -11,6 +11,7 @@ RUN apt-get update && \
   cmake \
   curl \
   docbook-xml \
+  docbook5-xml \
   eatmydata \
   flex \
   gdb \
