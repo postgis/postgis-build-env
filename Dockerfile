@@ -49,7 +49,7 @@ RUN echo /usr/lib/x86_64-linux-gnu/libeatmydata.so >> /etc/ld.so.preload
 
 ARG BUILD_THREADS=4
 
-ARG CGAL_BRANCH=5.3
+ARG CGAL_BRANCH=5.6
 RUN wget https://github.com/CGAL/cgal/releases/download/v${CGAL_BRANCH}/CGAL-${CGAL_BRANCH}.tar.xz && \
     tar xJf CGAL-${CGAL_BRANCH}.tar.xz && \
     cd CGAL-${CGAL_BRANCH} && mkdir build && cd build && \
@@ -58,7 +58,7 @@ RUN wget https://github.com/CGAL/cgal/releases/download/v${CGAL_BRANCH}/CGAL-${C
     cd /src && rm -rf CGAL-${CGAL_BRANCH}
 
 ARG SFCGAL_BRANCH=master
-RUN git clone --depth 1 --branch ${SFCGAL_BRANCH} https://gitlab.com/Oslandia/SFCGAL.git && \
+RUN git clone --depth 1 --branch ${SFCGAL_BRANCH} https://gitlab.com/sfcgal/SFCGAL.git && \
      cd SFCGAL && \
      mkdir cmake-build && \
      cd cmake-build && \
