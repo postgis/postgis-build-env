@@ -8,6 +8,22 @@ environments = []
 all_environments=[
     # put last modified first to iterate faster
        dict(
+            name='stable_pg15',
+            PG='REL_15_STABLE',
+            GEOS='3.11',
+            GDAL='release/3.5',
+            PROJ='9.0',
+            PG_CC='clang'
+        ),
+          dict(
+            name='stable_pg15',
+            PG='REL_15_STABLE',
+            GEOS='3.11',
+            GDAL='release/3.5',
+            PROJ='9.0',
+            PG_CC='gcc'
+        ),
+       dict(
             name='latest',
             PG='master',
             GEOS='main',
