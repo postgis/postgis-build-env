@@ -7,23 +7,7 @@ env_batch = 'all'
 environments = []
 all_environments=[
     # put last modified first to iterate faster
-       dict(
-            name='stable_pg15',
-            PG='REL_15_STABLE',
-            GEOS='3.11',
-            GDAL='release/3.5',
-            PROJ='9.0',
-            PG_CC='clang'
-        ),
-          dict(
-            name='stable_pg15',
-            PG='REL_15_STABLE',
-            GEOS='3.11',
-            GDAL='release/3.5',
-            PROJ='9.0',
-            PG_CC='gcc'
-        ),
-       dict(
+        dict(
             name='latest',
             PG='master',
             GEOS='main',
@@ -31,15 +15,15 @@ all_environments=[
             PROJ='master',
             PG_CC='gcc'
         ),
-       dict(
+        dict(
             name='stable_pg16',
             PG='REL_16_STABLE',
             GEOS='3.12',
-            GDAL='release/3.7',
+            GDAL='release/3.8',
             PROJ='9.2.1',
             PG_CC='gcc'
         ),
-       dict(
+        dict(
             name='stable_pg15',
             PG='REL_15_STABLE',
             GEOS='3.11',
@@ -47,7 +31,23 @@ all_environments=[
             PROJ='9.0',
             PG_CC='clang'
         ),
-          dict(
+        dict(
+            name='stable_pg15',
+            PG='REL_15_STABLE',
+            GEOS='3.11',
+            GDAL='release/3.5',
+            PROJ='9.0',
+            PG_CC='clang'
+        ),
+        dict(
+            name='stable_pg15',
+            PG='REL_15_STABLE',
+            GEOS='3.11',
+            GDAL='release/3.5',
+            PROJ='9.0',
+            PG_CC='gcc'
+        ),
+        dict(
             name='stable_pg15',
             PG='REL_15_STABLE',
             GEOS='3.11',
