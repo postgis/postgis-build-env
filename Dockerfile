@@ -19,6 +19,7 @@ RUN apt-get update && \
   libboost-serialization-dev \
   libboost-test-dev \
   libboost-thread-dev \
+  libclang-rt-dev \
   libcunit1-dev \
   libcurl4-gnutls-dev \
   libgmp-dev \
