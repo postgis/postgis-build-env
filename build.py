@@ -18,7 +18,7 @@ all_environments=[
         dict(
             name='stable_pg17',
             PG='REL_17_STABLE',
-            GEOS='3.12',
+            GEOS='main',
             GDAL='release/3.9',
             PROJ='9.4',
             PG_CC='gcc'
