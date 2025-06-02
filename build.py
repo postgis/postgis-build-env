@@ -13,15 +13,17 @@ all_environments=[
             GEOS='main',
             GDAL='master',
             PROJ='master',
-            PG_CC='gcc'
+            PG_CC='gcc',
+            SFCGAL='master'
         ),
         dict(
             name='stable_pg17',
             PG='REL_17_STABLE',
-            GEOS='main',
+            GEOS='3.13',
             GDAL='release/3.9',
             PROJ='9.4',
-            PG_CC='gcc'
+            PG_CC='gcc',
+            SFCGAL='v2.1.0'
         ),
         dict(
             name='stable_pg16',
@@ -176,6 +178,7 @@ for env in environments:
         '--build-arg', 'GDAL_BRANCH={GDAL}'.format_map(env),
         '--build-arg', 'PROJ_BRANCH={PROJ}'.format_map(env),
         '--build-arg', 'PG_CC={PG_CC}'.format_map(env),
+        '--build-arg', 'SFCGAL_BRANCH={SFCGAL}'.format_map(env),
         '-t', image,
         '.'
     ])
