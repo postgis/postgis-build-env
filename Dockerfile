@@ -33,6 +33,7 @@ RUN apt-get update && \
   libtool \
   libxml2-dev \
   libxml2-utils \
+  llvm \
   pkg-config \
   protobuf-c-compiler \
   sudo \
@@ -109,7 +110,7 @@ RUN git clone --depth 1 --branch ${GDAL_BRANCH} https://github.com/OSGeo/gdal &&
         mkdir build && cd build && \
         cmake -DCMAKE_BUILD_TYPE=Release .. \
         ; \
-    fi && \ 
+    fi && \
     make -j${BUILD_THREADS} && make install && \
     cd /src && rm -rf gdal
 
