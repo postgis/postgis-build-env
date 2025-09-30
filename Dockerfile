@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
 RUN apt-get update && \
   apt-get install -y --no-install-recommends \
@@ -23,9 +23,10 @@ RUN apt-get update && \
   libcunit1-dev \
   libcurl4-gnutls-dev \
   libgmp-dev \
+  libicu-dev \
   libjson-c-dev \
   libmpfr-dev \
-  libpcre3-dev \
+  libpcre2-dev \
   libprotobuf-c-dev \
   libreadline-dev \
   libsqlite3-dev \
