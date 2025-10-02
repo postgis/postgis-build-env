@@ -140,4 +140,9 @@ RUN ldconfig /usr/local/pgsql/lib
 USER postgres
 
 # create cluster now to save time on build
-RUN /usr/local/pgsql/bin/initdb -D /var/lib/postgresql
+RUN /usr/local/pgsql/bin/initdb -D /var/lib/postgresql \
+  -c fsync=off \
+  -c synchronous_commit=off \
+  -c full_page_writes=off \
+  -c wal_level=minimal \
+  -c max_wal_senders=0
