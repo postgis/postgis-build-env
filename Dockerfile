@@ -52,6 +52,26 @@ RUN echo /usr/lib/x86_64-linux-gnu/libeatmydata.so >> /etc/ld.so.preload
 
 ARG BUILD_THREADS=4
 
+
+# nlohmann/json - header-only library for SFCGAL (with CMake support)
+RUN set -ex \
+    && mkdir -p /usr/src \
+    && cd /usr/src \
+    # Get the latest release version dynamically
+    && NLOHMANN_JSON_VERSION=$(curl -s https://api.github.com/repos/nlohmann/json/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/') \
+    && echo "Installing nlohmann/json version: ${NLOHMANN_JSON_VERSION}" \
+    # Download and extract the full source with CMake support
+    && curl -L "https://github.com/nlohmann/json/archive/refs/tags/v${NLOHMANN_JSON_VERSION}.tar.gz" -o nlohmann-json.tar.gz \
+    && tar -xzf nlohmann-json.tar.gz \
+    && cd "json-${NLOHMANN_JSON_VERSION}" \
+    && mkdir build \
+    && cd build \
+    && cmake .. -DCMAKE_BUILD_TYPE=${DOCKER_CMAKE_BUILD_TYPE} -DJSON_BuildTests=OFF \
+    && make install \
+    && cd /usr/src \
+    && rm -rf "json-${NLOHMANN_JSON_VERSION}" nlohmann-json.tar.gz \
+    && echo "nlohmann/json ${NLOHMANN_JSON_VERSION} installed with CMake support" > /_pgis_nlohmann_json_version.txt
+
 ARG CGAL_BRANCH=5.6
 RUN wget https://github.com/CGAL/cgal/releases/download/v${CGAL_BRANCH}/CGAL-${CGAL_BRANCH}.tar.xz && \
     tar xJf CGAL-${CGAL_BRANCH}.tar.xz && \
