@@ -23,7 +23,7 @@ all_environments=[
             GDAL='release/3.11',
             PROJ='9.6',
             PG_CC='gcc',
-            SFCGAL='v2.1.0'
+            SFCGAL='v2.2.0'
         ) ,
 
         dict(

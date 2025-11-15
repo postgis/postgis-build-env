@@ -72,7 +72,7 @@ RUN set -ex \
     && rm -rf "json-${NLOHMANN_JSON_VERSION}" nlohmann-json.tar.gz \
     && echo "nlohmann/json ${NLOHMANN_JSON_VERSION} installed with CMake support" > /_pgis_nlohmann_json_version.txt
 
-ARG CGAL_BRANCH=5.6
+ARG CGAL_BRANCH=6.0.2
 RUN wget https://github.com/CGAL/cgal/releases/download/v${CGAL_BRANCH}/CGAL-${CGAL_BRANCH}.tar.xz && \
     tar xJf CGAL-${CGAL_BRANCH}.tar.xz && \
     cd CGAL-${CGAL_BRANCH} && mkdir build && cd build && \
