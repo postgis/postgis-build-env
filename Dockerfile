@@ -54,6 +54,8 @@ ARG BUILD_THREADS=4
 
 
 # nlohmann/json - header-only library for SFCGAL (with CMake support)
+# Build type defaults to Release; override with --build-arg if needed.
+ARG DOCKER_CMAKE_BUILD_TYPE=Release
 RUN set -ex \
     && mkdir -p /usr/src \
     && cd /usr/src \
