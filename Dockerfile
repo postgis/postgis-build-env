@@ -50,7 +50,27 @@ WORKDIR /src
 
 RUN echo /usr/lib/x86_64-linux-gnu/libeatmydata.so >> /etc/ld.so.preload
 
-ARG BUILD_THREADS=4
+# Determine a safe default parallelism: CGAL/SFCGAL cc1plus compilation
+# can spike to 2-3 GiB per job, so a hardcoded BUILD_THREADS=4 requires
+# roughly 10 GiB of container memory and reliably OOMs on smaller hosts.
+# The "auto" default caps at one job per 3 GiB of container memory and
+# at nproc, with a hard ceiling of 4. Override at build time with
+# --build-arg BUILD_THREADS=N.
+ARG BUILD_THREADS=auto
+RUN set -e; \
+    if [ "$BUILD_THREADS" = "auto" ]; then \
+        MEM_GB=$(awk '/MemTotal/ {printf "%d", $2 / 1024 / 1024}' /proc/meminfo); \
+        CPU=$(nproc); \
+        T=$(( MEM_GB / 3 )); \
+        [ "$T" -lt 1 ] && T=1; \
+        [ "$T" -gt "$CPU" ] && T=$CPU; \
+        [ "$T" -gt 4 ] && T=4; \
+    else \
+        T="$BUILD_THREADS"; \
+    fi; \
+    printf '#!/bin/sh\necho %s\n' "$T" > /usr/local/bin/build-threads; \
+    chmod +x /usr/local/bin/build-threads; \
+    echo "BUILD_THREADS resolved to: $(build-threads)"
 
 
 # nlohmann/json - header-only library for SFCGAL (with CMake support)
@@ -86,7 +106,7 @@ RUN git clone --depth 1 --branch ${SFCGAL_BRANCH} https://gitlab.com/sfcgal/SFCG
      mkdir cmake-build && \
      cd cmake-build && \
      cmake -DCGAL_DIR="/src/CGAL" -DCMAKE_PREFIX_PATH=/src/CGAL .. && \
-     make -j${BUILD_THREADS} && \
+     make -j"$(build-threads)" && \
      make install && \
      cd /src && rm -rf SFCGAL
 
@@ -94,10 +114,10 @@ ARG PROJ_BRANCH=master
 RUN git clone --depth 1 --branch ${PROJ_BRANCH} https://github.com/OSGeo/PROJ && \
     cd PROJ && \
     mkdir cmake-build && \
-    #./autogen.sh && ./configure && make -j${BUILD_THREADS} && make install && \
+    #./autogen.sh && ./configure && make -j"$(build-threads)" && make install && \
     cd cmake-build && \
     cmake .. && \
-    make -j${BUILD_THREADS} && \
+    make -j"$(build-threads)" && \
     make install && \
     #projsync --system-directory --source-id us_noaa && \
     #projsync --system-directory --source-id ch_swisstopo && \
@@ -132,7 +152,7 @@ RUN git clone --depth 1 --branch ${GDAL_BRANCH} https://github.com/OSGeo/gdal &&
         cmake -DCMAKE_BUILD_TYPE=Release .. \
         ; \
     fi && \
-    make -j${BUILD_THREADS} && make install && \
+    make -j"$(build-threads)" && make install && \
     cd /src && rm -rf gdal
 
 ARG GEOS_BRANCH=master
@@ -141,7 +161,7 @@ RUN git clone --depth 1 --branch ${GEOS_BRANCH} https://github.com/libgeos/geos 
     mkdir cmake-build && \
     cd cmake-build && \
     cmake -DCMAKE_BUILD_TYPE=Release .. && \
-    make -j${BUILD_THREADS} && make install && \
+    make -j"$(build-threads)" && make install && \
     cd /src && rm -rf geos
 
 ARG POSTGRES_BRANCH=master
@@ -149,7 +169,7 @@ ARG PG_CC=gcc
 RUN git clone --depth 1 --branch ${POSTGRES_BRANCH} https://github.com/postgres/postgres && \
     cd postgres && \
     ./configure --enable-cassert --enable-debug CC=${PG_CC} CFLAGS="-ggdb -Og -g3 -fno-omit-frame-pointer" && \
-    make -j${BUILD_THREADS} && make install && \
+    make -j"$(build-threads)" && make install && \
     cd /src && rm -rf postgres
 
 # disable requiring password to sudo
