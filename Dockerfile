@@ -80,6 +80,9 @@ RUN set -e; \
         [ "$T" -gt "$CPU" ] && T=$CPU; \
         [ "$T" -gt 4 ] && T=4; \
     else \
+        case "$BUILD_THREADS" in \
+            ''|*[!0-9]*|0) echo "BUILD_THREADS must be 'auto' or a positive integer" >&2; exit 1 ;; \
+        esac; \
         T="$BUILD_THREADS"; \
     fi; \
     printf '#!/bin/sh\necho %s\n' "$T" > /usr/local/bin/build-threads; \
@@ -141,17 +144,12 @@ RUN git clone --depth 1 --branch ${PROJ_BRANCH} https://github.com/OSGeo/PROJ &&
     mkdir cmake-build && \
     #./autogen.sh && ./configure && make -j"$(build-threads)" && make install && \
     cd cmake-build && \
-<<<<<<< HEAD
     cmake \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DCMAKE_C_FLAGS_RELWITHDEBINFO="${DEBUG_CFLAGS}" \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="${DEBUG_CXXFLAGS}" \
       .. && \
-    make -j${BUILD_THREADS} && \
-=======
-    cmake .. && \
     make -j"$(build-threads)" && \
->>>>>>> d6c7caa (Auto-detect a memory-safe BUILD_THREADS default)
     make install && \
     #projsync --system-directory --source-id us_noaa && \
     #projsync --system-directory --source-id ch_swisstopo && \
@@ -190,45 +188,29 @@ RUN git clone --depth 1 --branch ${GDAL_BRANCH} https://github.com/OSGeo/gdal &&
           .. \
         ; \
     fi && \
-<<<<<<< HEAD
-    make -j${BUILD_THREADS} && make install && \
-    cd /src && rm -rf gdal/.git gdal/build
-=======
     make -j"$(build-threads)" && make install && \
-    cd /src && rm -rf gdal
->>>>>>> d6c7caa (Auto-detect a memory-safe BUILD_THREADS default)
+    cd /src && rm -rf gdal/.git gdal/build
 
 ARG GEOS_BRANCH=master
 RUN git clone --depth 1 --branch ${GEOS_BRANCH} https://github.com/libgeos/geos && \
     cd geos && \
     mkdir cmake-build && \
     cd cmake-build && \
-<<<<<<< HEAD
     cmake \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DCMAKE_C_FLAGS_RELWITHDEBINFO="${DEBUG_CFLAGS}" \
       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="${DEBUG_CXXFLAGS}" \
       .. && \
-    make -j${BUILD_THREADS} && make install && \
-    cd /src && rm -rf geos/.git geos/cmake-build
-=======
-    cmake -DCMAKE_BUILD_TYPE=Release .. && \
     make -j"$(build-threads)" && make install && \
-    cd /src && rm -rf geos
->>>>>>> d6c7caa (Auto-detect a memory-safe BUILD_THREADS default)
+    cd /src && rm -rf geos/.git geos/cmake-build
 
 ARG POSTGRES_BRANCH=master
 ARG PG_CC=gcc
 RUN git clone --depth 1 --branch ${POSTGRES_BRANCH} https://github.com/postgres/postgres && \
     cd postgres && \
     ./configure --enable-cassert --enable-debug CC=${PG_CC} CFLAGS="-ggdb -Og -g3 -fno-omit-frame-pointer" && \
-<<<<<<< HEAD
-    make -j${BUILD_THREADS} && make install && \
-    cd /src && rm -rf postgres/.git
-=======
     make -j"$(build-threads)" && make install && \
-    cd /src && rm -rf postgres
->>>>>>> d6c7caa (Auto-detect a memory-safe BUILD_THREADS default)
+    cd /src && rm -rf postgres/.git
 
 # disable requiring password to sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
