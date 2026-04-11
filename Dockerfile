@@ -54,12 +54,26 @@ RUN echo /usr/lib/x86_64-linux-gnu/libeatmydata.so >> /etc/ld.so.preload
 # can spike to 2-3 GiB per job, so a hardcoded BUILD_THREADS=4 requires
 # roughly 10 GiB of container memory and reliably OOMs on smaller hosts.
 # The "auto" default caps at one job per 3 GiB of container memory and
-# at nproc, with a hard ceiling of 4. Override at build time with
-# --build-arg BUILD_THREADS=N.
+# at nproc, with a hard ceiling of 4. Memory is read from the cgroup
+# limit (v2, then v1) before falling back to /proc/meminfo, so that
+# --memory-constrained builds (e.g. Docker Desktop) are respected.
+# Override at build time with --build-arg BUILD_THREADS=N.
 ARG BUILD_THREADS=auto
 RUN set -e; \
     if [ "$BUILD_THREADS" = "auto" ]; then \
-        MEM_GB=$(awk '/MemTotal/ {printf "%d", $2 / 1024 / 1024}' /proc/meminfo); \
+        MEM_BYTES=""; \
+        if [ -r /sys/fs/cgroup/memory.max ]; then \
+            v=$(cat /sys/fs/cgroup/memory.max); \
+            [ "$v" != "max" ] && MEM_BYTES="$v"; \
+        elif [ -r /sys/fs/cgroup/memory/memory.limit_in_bytes ]; then \
+            v=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes); \
+            [ "$v" -lt 9000000000000000000 ] && MEM_BYTES="$v"; \
+        fi; \
+        if [ -n "$MEM_BYTES" ]; then \
+            MEM_GB=$(( MEM_BYTES / 1024 / 1024 / 1024 )); \
+        else \
+            MEM_GB=$(awk '/MemTotal/ {printf "%d", $2 / 1024 / 1024}' /proc/meminfo); \
+        fi; \
         CPU=$(nproc); \
         T=$(( MEM_GB / 3 )); \
         [ "$T" -lt 1 ] && T=1; \
