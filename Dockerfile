@@ -80,6 +80,9 @@ RUN set -e; \
         [ "$T" -gt "$CPU" ] && T=$CPU; \
         [ "$T" -gt 4 ] && T=4; \
     else \
+        case "$BUILD_THREADS" in \
+            ''|*[!0-9]*|0) echo "BUILD_THREADS must be 'auto' or a positive integer" >&2; exit 1 ;; \
+        esac; \
         T="$BUILD_THREADS"; \
     fi; \
     printf '#!/bin/sh\necho %s\n' "$T" > /usr/local/bin/build-threads; \
