@@ -51,6 +51,8 @@ WORKDIR /src
 RUN echo /usr/lib/x86_64-linux-gnu/libeatmydata.so >> /etc/ld.so.preload
 
 ARG BUILD_THREADS=4
+ARG DEBUG_CFLAGS="-O2 -g3 -ggdb -fno-omit-frame-pointer -DNDEBUG"
+ARG DEBUG_CXXFLAGS="-O2 -g3 -ggdb -fno-omit-frame-pointer -DNDEBUG"
 
 
 # nlohmann/json - header-only library for SFCGAL (with CMake support)
@@ -85,10 +87,16 @@ RUN git clone --depth 1 --branch ${SFCGAL_BRANCH} https://gitlab.com/sfcgal/SFCG
      cd SFCGAL && \
      mkdir cmake-build && \
      cd cmake-build && \
-     cmake -DCGAL_DIR="/src/CGAL" -DCMAKE_PREFIX_PATH=/src/CGAL .. && \
+     cmake \
+       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+       -DCMAKE_C_FLAGS_RELWITHDEBINFO="${DEBUG_CFLAGS}" \
+       -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="${DEBUG_CXXFLAGS}" \
+       -DCGAL_DIR="/src/CGAL" \
+       -DCMAKE_PREFIX_PATH=/src/CGAL \
+       .. && \
      make -j${BUILD_THREADS} && \
      make install && \
-     cd /src && rm -rf SFCGAL
+     cd /src && rm -rf SFCGAL/.git SFCGAL/cmake-build
 
 ARG PROJ_BRANCH=master
 RUN git clone --depth 1 --branch ${PROJ_BRANCH} https://github.com/OSGeo/PROJ && \
@@ -96,12 +104,16 @@ RUN git clone --depth 1 --branch ${PROJ_BRANCH} https://github.com/OSGeo/PROJ &&
     mkdir cmake-build && \
     #./autogen.sh && ./configure && make -j${BUILD_THREADS} && make install && \
     cd cmake-build && \
-    cmake .. && \
+    cmake \
+      -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+      -DCMAKE_C_FLAGS_RELWITHDEBINFO="${DEBUG_CFLAGS}" \
+      -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="${DEBUG_CXXFLAGS}" \
+      .. && \
     make -j${BUILD_THREADS} && \
     make install && \
     #projsync --system-directory --source-id us_noaa && \
     #projsync --system-directory --source-id ch_swisstopo && \
-    cd /src && rm -rf PROJ
+    cd /src && rm -rf PROJ/.git PROJ/cmake-build
 
 
 ARG BUILD_DATE
@@ -124,25 +136,33 @@ RUN git clone --depth 1 --branch ${GDAL_BRANCH} https://github.com/OSGeo/gdal &&
     if [ -f "./autogen.sh" ]; then \
       # Building with autoconf ( old/deprecated )
       ./autogen.sh && \
-      ./configure \
+      CFLAGS="${DEBUG_CFLAGS}" CXXFLAGS="${DEBUG_CXXFLAGS}" ./configure \
       ; \
     else \
         # Building with cmake
         mkdir build && cd build && \
-        cmake -DCMAKE_BUILD_TYPE=Release .. \
+        cmake \
+          -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+          -DCMAKE_C_FLAGS_RELWITHDEBINFO="${DEBUG_CFLAGS}" \
+          -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="${DEBUG_CXXFLAGS}" \
+          .. \
         ; \
     fi && \
     make -j${BUILD_THREADS} && make install && \
-    cd /src && rm -rf gdal
+    cd /src && rm -rf gdal/.git gdal/build
 
 ARG GEOS_BRANCH=master
 RUN git clone --depth 1 --branch ${GEOS_BRANCH} https://github.com/libgeos/geos && \
     cd geos && \
     mkdir cmake-build && \
     cd cmake-build && \
-    cmake -DCMAKE_BUILD_TYPE=Release .. && \
+    cmake \
+      -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+      -DCMAKE_C_FLAGS_RELWITHDEBINFO="${DEBUG_CFLAGS}" \
+      -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="${DEBUG_CXXFLAGS}" \
+      .. && \
     make -j${BUILD_THREADS} && make install && \
-    cd /src && rm -rf geos
+    cd /src && rm -rf geos/.git geos/cmake-build
 
 ARG POSTGRES_BRANCH=master
 ARG PG_CC=gcc
@@ -150,7 +170,7 @@ RUN git clone --depth 1 --branch ${POSTGRES_BRANCH} https://github.com/postgres/
     cd postgres && \
     ./configure --enable-cassert --enable-debug CC=${PG_CC} CFLAGS="-ggdb -Og -g3 -fno-omit-frame-pointer" && \
     make -j${BUILD_THREADS} && make install && \
-    cd /src && rm -rf postgres
+    cd /src && rm -rf postgres/.git
 
 # disable requiring password to sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
