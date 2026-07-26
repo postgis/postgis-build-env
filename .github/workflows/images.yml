@@ -1,0 +1,62 @@
+name: Container Images
+
+on:
+  pull_request:
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  matrix:
+    name: Build matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v6
+      - id: matrix
+        run: |
+          matrix="$(python3 build.py --no-push --print-matrix)"
+          echo "matrix=${matrix}" >> "${GITHUB_OUTPUT}"
+
+  build:
+    name: ${{ matrix.image.tag }}
+    needs: matrix
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        image: ${{ fromJson(needs.matrix.outputs.matrix).include }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to OSGeo registry
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: docker/login-action@v3
+        with:
+          registry: repo.osgeo.org
+          username: ${{ secrets.OSGEO_REGISTRY_USERNAME }}
+          password: ${{ secrets.OSGEO_REGISTRY_PASSWORD }}
+
+      - name: Build image
+        run: |
+          set -eu
+          publish=(--no-push)
+          repositories=(--repository postgis/postgis-build-env)
+          if test "${GITHUB_EVENT_NAME}" = "push" && test "${GITHUB_REF}" = "refs/heads/master"; then
+            publish=(--push)
+            repositories+=(--repository repo.osgeo.org/postgis/build-env)
+          fi
+          python3 build.py "${publish[@]}" "${repositories[@]}" --tag "${{ matrix.image.tag }}"
