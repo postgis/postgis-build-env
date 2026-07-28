@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import datetime
+import os
 import re
 import subprocess
 import sys
@@ -189,6 +190,7 @@ for env in environments:
         '--build-arg', 'PROJ_BRANCH={PROJ}'.format_map(env),
         '--build-arg', 'PG_CC={PG_CC}'.format_map(env),
         '--build-arg', 'SFCGAL_BRANCH={SFCGAL}'.format_map(env),
+        '--build-arg', 'BUILD_THREADS={}'.format(os.environ.get('BUILD_THREADS', 'auto')),
         '-t', image,
         '.'
     ])
