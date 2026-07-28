@@ -173,7 +173,23 @@ def build_metadata(env):
     else:
         tag = 'pg{PG}{compiler_tag}-geos{GEOS}-gdal{GDAL}-proj{PROJ}'.format_map(versions)
     env['tag'] = tag
+    env['POSTGRES_EXTRA_CONFIGURE'] = postgres_extra_configure(env['PG'])
     return env
+
+
+def postgres_extra_configure(postgres_branch):
+    if postgres_branch == 'master':
+        return '--with-lz4 --with-zstd'
+    match = re.fullmatch(r'REL_(\d+)_STABLE', postgres_branch)
+    if not match:
+        return ''
+    major = int(match.group(1))
+    options = []
+    if major >= 14:
+        options.append('--with-lz4')
+    if major >= 15:
+        options.append('--with-zstd')
+    return ' '.join(options)
 
 
 def select_environments(env_batch, tag):
@@ -223,6 +239,7 @@ if args.print_matrix:
                 'proj': env['PROJ'],
                 'compiler': env['PG_CC'],
                 'sfcgal': env['SFCGAL'],
+                'postgres_extra_configure': env['POSTGRES_EXTRA_CONFIGURE'],
             }
             for env in unique_by_tag(environments)
         ]
@@ -245,6 +262,7 @@ for env in environments:
         '--build-arg', 'PG_CC={PG_CC}'.format_map(env),
         '--build-arg', 'SFCGAL_BRANCH={SFCGAL}'.format_map(env),
         '--build-arg', 'BUILD_THREADS={}'.format(os.environ.get('BUILD_THREADS', 'auto')),
+        '--build-arg', 'POSTGRES_EXTRA_CONFIGURE={POSTGRES_EXTRA_CONFIGURE}'.format_map(env),
     ]
     for image in images:
         build_command.extend(['-t', image])

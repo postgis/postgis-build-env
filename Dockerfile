@@ -25,6 +25,7 @@ RUN apt-get update && \
   libgmp-dev \
   libicu-dev \
   libjson-c-dev \
+  liblz4-dev \
   libmpfr-dev \
   libpcre2-dev \
   libprotobuf-c-dev \
@@ -34,6 +35,7 @@ RUN apt-get update && \
   libtool \
   libxml2-dev \
   libxml2-utils \
+  libzstd-dev \
   llvm \
   pkg-config \
   protobuf-c-compiler \
@@ -89,8 +91,14 @@ RUN set -e; \
     chmod +x /usr/local/bin/build-threads; \
     echo "BUILD_THREADS resolved to: $(build-threads)"
 ARG SFCGAL_BUILD_THREADS=1
+ARG BUILD_DATE
 ARG DEBUG_CFLAGS="-O2 -g3 -ggdb -fno-omit-frame-pointer -DNDEBUG"
 ARG DEBUG_CXXFLAGS="-O2 -g3 -ggdb -fno-omit-frame-pointer -DNDEBUG"
+ARG GDAL_CMAKE_DRIVER_OPTIONS="-DGDAL_BUILD_OPTIONAL_DRIVERS=OFF -DOGR_BUILD_OPTIONAL_DRIVERS=OFF -DGDAL_ENABLE_DRIVER_GTIFF=ON -DGDAL_ENABLE_DRIVER_PNG=ON -DGDAL_ENABLE_DRIVER_JPEG=ON -DGDAL_ENABLE_DRIVER_MEM=ON -DGDAL_ENABLE_DRIVER_VRT=ON -DGDAL_ENABLE_DRIVER_HFA=ON -DOGR_ENABLE_DRIVER_GEOJSON=ON -DOGR_ENABLE_DRIVER_GPKG=ON -DOGR_ENABLE_DRIVER_SQLITE=ON -DOGR_ENABLE_DRIVER_ESRI_SHAPE=ON"
+ARG POSTGRES_EXTRA_CONFIGURE=""
+
+RUN mkdir -p /usr/local/share/postgis-build-env && \
+    printf 'BUILD_DATE=%s\n' "${BUILD_DATE}" > /usr/local/share/postgis-build-env/build-commits.env
 
 
 # nlohmann/json - header-only library for SFCGAL (with CMake support)
@@ -112,10 +120,12 @@ RUN set -ex \
     && make install \
     && cd /usr/src \
     && rm -rf "json-${NLOHMANN_JSON_VERSION}" nlohmann-json.tar.gz \
-    && echo "nlohmann/json ${NLOHMANN_JSON_VERSION} installed with CMake support" > /_pgis_nlohmann_json_version.txt
+    && echo "nlohmann/json ${NLOHMANN_JSON_VERSION} installed with CMake support" > /_pgis_nlohmann_json_version.txt \
+    && printf 'NLOHMANN_JSON_VERSION=%s\n' "${NLOHMANN_JSON_VERSION}" >> /usr/local/share/postgis-build-env/build-commits.env
 
 ARG CGAL_BRANCH=6.0.2
 RUN wget https://github.com/CGAL/cgal/releases/download/v${CGAL_BRANCH}/CGAL-${CGAL_BRANCH}.tar.xz && \
+    printf 'CGAL_BRANCH=%s\n' "${CGAL_BRANCH}" >> /usr/local/share/postgis-build-env/build-commits.env && \
     tar xJf CGAL-${CGAL_BRANCH}.tar.xz && \
     cd CGAL-${CGAL_BRANCH} && mkdir build && cd build && \
     cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX=/src/CGAL .. && \
@@ -124,6 +134,7 @@ RUN wget https://github.com/CGAL/cgal/releases/download/v${CGAL_BRANCH}/CGAL-${C
 
 ARG SFCGAL_BRANCH=master
 RUN git clone --depth 1 --branch ${SFCGAL_BRANCH} https://gitlab.com/sfcgal/SFCGAL.git && \
+     printf 'SFCGAL_BRANCH=%s\nSFCGAL_COMMIT=%s\n' "${SFCGAL_BRANCH}" "$(git -C SFCGAL rev-parse HEAD)" >> /usr/local/share/postgis-build-env/build-commits.env && \
      cd SFCGAL && \
      mkdir cmake-build && \
      cd cmake-build && \
@@ -140,6 +151,7 @@ RUN git clone --depth 1 --branch ${SFCGAL_BRANCH} https://gitlab.com/sfcgal/SFCG
 
 ARG PROJ_BRANCH=master
 RUN git clone --depth 1 --branch ${PROJ_BRANCH} https://github.com/OSGeo/PROJ && \
+    printf 'PROJ_BRANCH=%s\nPROJ_COMMIT=%s\n' "${PROJ_BRANCH}" "$(git -C PROJ rev-parse HEAD)" >> /usr/local/share/postgis-build-env/build-commits.env && \
     cd PROJ && \
     mkdir cmake-build && \
     #./autogen.sh && ./configure && make -j"$(build-threads)" && make install && \
@@ -155,8 +167,6 @@ RUN git clone --depth 1 --branch ${PROJ_BRANCH} https://github.com/OSGeo/PROJ &&
     #projsync --system-directory --source-id ch_swisstopo && \
     cd /src && rm -rf PROJ/.git PROJ/cmake-build
 
-
-ARG BUILD_DATE
 ENV PGDATA=/var/lib/postgresql
 
 RUN useradd postgres -p paYAHIZz4VZyc -G sudo && \
@@ -167,6 +177,7 @@ ENV PATH="/usr/local/pgsql/bin:${PATH}"
 
 ARG GDAL_BRANCH=master
 RUN git clone --depth 1 --branch ${GDAL_BRANCH} https://github.com/OSGeo/gdal && \
+    printf 'GDAL_BRANCH=%s\nGDAL_COMMIT=%s\n' "${GDAL_BRANCH}" "$(git -C gdal rev-parse HEAD)" >> /usr/local/share/postgis-build-env/build-commits.env && \
     cd gdal && \
     # gdal project directory structure - has been changed !
     if [ -d "gdal" ] ; then \
@@ -185,6 +196,7 @@ RUN git clone --depth 1 --branch ${GDAL_BRANCH} https://github.com/OSGeo/gdal &&
           -DCMAKE_BUILD_TYPE=RelWithDebInfo \
           -DCMAKE_C_FLAGS_RELWITHDEBINFO="${DEBUG_CFLAGS}" \
           -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="${DEBUG_CXXFLAGS}" \
+          ${GDAL_CMAKE_DRIVER_OPTIONS} \
           .. \
         ; \
     fi && \
@@ -193,6 +205,7 @@ RUN git clone --depth 1 --branch ${GDAL_BRANCH} https://github.com/OSGeo/gdal &&
 
 ARG GEOS_BRANCH=master
 RUN git clone --depth 1 --branch ${GEOS_BRANCH} https://github.com/libgeos/geos && \
+    printf 'GEOS_BRANCH=%s\nGEOS_COMMIT=%s\n' "${GEOS_BRANCH}" "$(git -C geos rev-parse HEAD)" >> /usr/local/share/postgis-build-env/build-commits.env && \
     cd geos && \
     mkdir cmake-build && \
     cd cmake-build && \
@@ -207,10 +220,17 @@ RUN git clone --depth 1 --branch ${GEOS_BRANCH} https://github.com/libgeos/geos 
 ARG POSTGRES_BRANCH=master
 ARG PG_CC=gcc
 RUN git clone --depth 1 --branch ${POSTGRES_BRANCH} https://github.com/postgres/postgres && \
+    printf 'POSTGRES_BRANCH=%s\nPOSTGRES_COMMIT=%s\nPOSTGRES_EXTRA_CONFIGURE=%s\n' "${POSTGRES_BRANCH}" "$(git -C postgres rev-parse HEAD)" "${POSTGRES_EXTRA_CONFIGURE}" >> /usr/local/share/postgis-build-env/build-commits.env && \
     cd postgres && \
-    ./configure --enable-cassert --enable-debug CC=${PG_CC} CFLAGS="-ggdb -Og -g3 -fno-omit-frame-pointer" && \
+    ./configure --enable-cassert --enable-debug ${POSTGRES_EXTRA_CONFIGURE} CC=${PG_CC} CFLAGS="-ggdb -Og -g3 -fno-omit-frame-pointer" && \
     make -j"$(build-threads)" && make install && \
     cd /src && rm -rf postgres/.git
+
+RUN printf '%s\n' \
+    '#!/bin/sh' \
+    'cat /usr/local/share/postgis-build-env/build-commits.env' \
+    > /usr/local/bin/postgis-build-env-commits && \
+    chmod 0755 /usr/local/bin/postgis-build-env-commits
 
 # disable requiring password to sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
