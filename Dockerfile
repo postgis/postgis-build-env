@@ -51,6 +51,7 @@ WORKDIR /src
 RUN echo /usr/lib/x86_64-linux-gnu/libeatmydata.so >> /etc/ld.so.preload
 
 ARG BUILD_THREADS=4
+ARG SFCGAL_BUILD_THREADS=1
 ARG DEBUG_CFLAGS="-O2 -g3 -ggdb -fno-omit-frame-pointer -DNDEBUG"
 ARG DEBUG_CXXFLAGS="-O2 -g3 -ggdb -fno-omit-frame-pointer -DNDEBUG"
 
@@ -96,7 +97,7 @@ RUN git clone --depth 1 --branch ${SFCGAL_BRANCH} https://gitlab.com/sfcgal/SFCG
        -DCGAL_DIR="/src/CGAL" \
        -DCMAKE_PREFIX_PATH=/src/CGAL \
        .. && \
-     make -j${BUILD_THREADS} && \
+     make -j${SFCGAL_BUILD_THREADS} && \
      make install && \
      cd /src && rm -rf SFCGAL/.git SFCGAL/cmake-build
 
