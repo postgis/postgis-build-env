@@ -48,7 +48,7 @@ RUN apt-get update && \
 
 WORKDIR /src
 
-RUN echo /usr/lib/x86_64-linux-gnu/libeatmydata.so >> /etc/ld.so.preload
+RUN echo "/usr/lib/$(dpkg-architecture -qDEB_HOST_MULTIARCH)/libeatmydata.so" >> /etc/ld.so.preload
 
 # Determine a safe default parallelism: CGAL/SFCGAL cc1plus compilation
 # can spike to 2-3 GiB per job, so a hardcoded BUILD_THREADS=4 requires
