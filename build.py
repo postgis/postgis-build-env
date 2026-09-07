@@ -20,7 +20,7 @@ all_environments=[
         dict(
             name='stable_pg19',
             PG='REL_19_STABLE',
-            GEOS='3.15',
+            GEOS='main',
             GDAL='release/3.14',
             PROJ='9.8',
             PG_CC='gcc',
@@ -202,7 +202,7 @@ def postgres_extra_configure(postgres_branch):
 
 
 def select_environments(env_batch, tag):
-    environments = all_environments[0:3] if env_batch == 'weekly' else all_environments
+    environments = all_environments[1:2] if env_batch == 'weekly' else all_environments
     environments = [build_metadata(env) for env in environments]
     if tag:
         environments = [env for env in environments if env['tag'] == tag]
