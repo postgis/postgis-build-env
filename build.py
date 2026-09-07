@@ -16,6 +16,15 @@ all_environments=[
             PROJ='master',
             PG_CC='gcc',
             SFCGAL='master'
+        )   ,
+        dict(
+            name='stable_pg19',
+            PG='REL_19_STABLE',
+            GEOS='main',
+            GDAL='release/3.14',
+            PROJ='9.8',
+            PG_CC='gcc',
+            SFCGAL='v2.3.0'
         )    ,
         dict(
             name='stable_pg18',
