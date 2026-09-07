@@ -20,7 +20,7 @@ all_environments=[
         dict(
             name='stable_pg19',
             PG='REL_19_STABLE',
-            GEOS='main',
+            GEOS='3.15',
             GDAL='release/3.14',
             PROJ='9.8',
             PG_CC='gcc',
@@ -29,7 +29,7 @@ all_environments=[
         dict(
             name='stable_pg18',
             PG='REL_18_STABLE',
-            GEOS='main',
+            GEOS='3.14',
             GDAL='release/3.11',
             PROJ='9.6',
             PG_CC='gcc',
