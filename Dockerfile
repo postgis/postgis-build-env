@@ -123,7 +123,7 @@ RUN set -ex \
     && echo "nlohmann/json ${NLOHMANN_JSON_VERSION} installed with CMake support" > /_pgis_nlohmann_json_version.txt \
     && printf 'NLOHMANN_JSON_VERSION=%s\n' "${NLOHMANN_JSON_VERSION}" >> /usr/local/share/postgis-build-env/build-commits.env
 
-ARG CGAL_BRANCH=6.0.2
+ARG CGAL_BRANCH=6.0.3
 RUN wget https://github.com/CGAL/cgal/releases/download/v${CGAL_BRANCH}/CGAL-${CGAL_BRANCH}.tar.xz && \
     printf 'CGAL_BRANCH=%s\n' "${CGAL_BRANCH}" >> /usr/local/share/postgis-build-env/build-commits.env && \
     tar xJf CGAL-${CGAL_BRANCH}.tar.xz && \
